@@ -11,7 +11,7 @@ services:
         fromService:
           type: redis
           name: cache
-          envVarKey: REDIS_URL
+          property: connectionString
       - key: RATE_LIMIT_PER_MINUTE
         value: "10"
       - key: MONTHLY_BUDGET_USD
