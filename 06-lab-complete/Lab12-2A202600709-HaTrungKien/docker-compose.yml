@@ -1,0 +1,32 @@
+services:
+  backend:
+    image: coffeeholic-backend
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./frontend:/usr/share/nginx/html/frontend:ro
+      - ./data:/usr/share/nginx/html/data:ro
+    depends_on:
+      - backend

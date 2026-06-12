@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ai-cafe-backend
+    env: docker
+    plan: free
+    envVars:
+      - key: AGENT_API_KEY
+        value: secret-key-123
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: cache
+          envVarKey: REDIS_URL
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "10"
+      - key: MONTHLY_BUDGET_USD
+        value: "10.0"
+
+  - type: redis
+    name: cache
+    ipAllowList: [] # only allow internal connections
+    plan: free
